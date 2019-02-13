@@ -2,16 +2,30 @@ import { Injectable } from '@angular/core';
 import { CarService } from './services/car.service';
 import { FilterService } from './services/filter.service';
 import { OptionService } from './services/option.service';
-import { Observable } from 'rxjs';
+import {
+  never,
+  Observable,
+  Subject
+} from 'rxjs';
 import { Car } from './types/car.type';
 import { FilterValue } from './types/filter-value.type';
 import { Option } from './types/option.type';
+import {
+  select,
+  Store
+} from '@ngrx/store';
+import { ApplicationState } from '../statemanagement/application.state';
 
 @Injectable()
 export class AppSandbox {
+  leasePrice$ = this.store.pipe(select(state => state.leasePrice));
+  // TODO: read the selectedOption from the store (hint: see leasePrice)
+  selectedOptions$ = new Subject();
+
   constructor(private carService: CarService,
               private filterService: FilterService,
-              private optionService: OptionService) {
+              private optionService: OptionService,
+              private store: Store<ApplicationState>) {
   }
 
   getCars(): Observable<Car[]> {
@@ -36,5 +50,13 @@ export class AppSandbox {
 
   getOptions(carId: string): Observable<Option[]> {
     return this.optionService.find(carId);
+  }
+
+  addOption(option): void {
+    // TODO: dispatch the new option to the store, with the correct instance of an action class
+  }
+
+  removeOption(optionId): void {
+    // TODO: dispatch the optionId to the store, with the correct instance of an action class
   }
 }

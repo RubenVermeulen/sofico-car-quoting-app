@@ -78,7 +78,11 @@ export class OptionsContainer implements OnInit {
       mergeMap(carId => this.sb.getOptions(carId))
     );
 
+    // TODO: get the selected options from the sandbox
     this.selectedOptions$ = new Subject();
+    // TODO: combine both the selectedOptions$ and the options$
+    // TODO: then union both using the following code snippet: unionBy(selectedCatalogOptions, catalogOptions, 'optionId')
+    // TODO: EXTRA: sort the result of the union with the sortBy function of lodash (https://lodash.com/docs/4.17.11#sortBy)
     this.combinedOptions$ = new Subject();
 
     // presentation streams
@@ -86,19 +90,21 @@ export class OptionsContainer implements OnInit {
       mergeMap(carId => this.sb.getCar(carId))
     );
 
+    // TODO: replace this.options$ with the this.combinedOptions$
     this.packs$ = this.options$.pipe(
       map(options => options.filter(option => option.optionType === 'pack'))
     );
+    // TODO: replace this.options$ with the this.combinedOptions$
     this.singleOptions$ = this.options$.pipe(
       map(options => options.filter(option => option.optionType === 'option'))
     );
   }
 
   onAddOption(option: Option): void {
-
+    // TODO: call the correct method from the sandbox
   }
 
   onRemoveOption(optionId: string): void {
-
+    // TODO: call the correct method from the sandbox
   }
 }
