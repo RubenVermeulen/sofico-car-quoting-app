@@ -93,10 +93,8 @@ export class OptionsContainer implements OnInit {
   }
 
   onAddOption(option: Option): void {
-    // TODO
   }
 
   onRemoveOption(optionId: string): void {
-    // TODO
   }
 }
