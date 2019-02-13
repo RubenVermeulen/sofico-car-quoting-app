@@ -18,11 +18,6 @@ import { Car } from '../../types/car.type';
   `
 })
 export class CarListComponent {
-  // TODO: as a dumb component it's not allowed to fetch data
-  // TODO: move the responsibilities of fetching data to the respective smart component
-  // TODO: and pass along the data from top to bottom using the @Input decorator
-  // TODO: update the template accordingly (the async pipe is not necessary anymore)
-
   @Input() cars: Car[];
 
   tracker = (i) => i;
