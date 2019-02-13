@@ -15,6 +15,7 @@ import {
   Store
 } from '@ngrx/store';
 import { ApplicationState } from '../statemanagement/application.state';
+import { ClearOptionsAction } from '../statemanagement/actions';
 
 @Injectable()
 export class AppSandbox {
@@ -50,6 +51,10 @@ export class AppSandbox {
 
   getOptions(carId: string): Observable<Option[]> {
     return this.optionService.find(carId);
+  }
+
+  clearOptions(): void {
+    this.store.dispatch(new ClearOptionsAction());
   }
 
   addOption(option): void {

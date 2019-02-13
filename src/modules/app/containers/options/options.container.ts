@@ -40,7 +40,9 @@ import { AppSandbox } from '../../app.sandbox';
                          (removeOption)="onRemoveOption($event)"></app-option-list>
       </div>
       <div class="col-sm-5 col-md-4">
-        <app-side-bar [car]="activeSelection$ | async">
+        <app-side-bar [car]="activeSelection$ | async"
+                      [selectedOptions]="selectedOptions$ | async"
+                      selectedOptionsEnabled="true">
         </app-side-bar>
       </div>
     </div>
