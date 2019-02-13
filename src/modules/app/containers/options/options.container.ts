@@ -31,12 +31,12 @@ import { OptionService } from '../../services/option.service';
       <div class="col-sm-7 col-md-8">
         <h2>Packs</h2>
         <br>
-        <app-option-list [options]="packs$ | async"
+        <app-option-list [options]="[]"
                          (addOption)="onAddOption($event)"
                          (removeOption)="onRemoveOption($event)"></app-option-list>
         <h2>Options</h2>
         <br>
-        <app-option-list [options]="singleOptions$ | async"
+        <app-option-list [options]="[]"
                          (addOption)="onAddOption($event)"
                          (removeOption)="onRemoveOption($event)"></app-option-list>
       </div>
@@ -48,22 +48,14 @@ import { OptionService } from '../../services/option.service';
   `
 })
 export class OptionsContainer implements OnInit {
-  // TODO: remove both the car and the option service as dependency from this container (smart component)
+  // TODO: remove both the option service as dependency from this container (smart component)
   // TODO: add the sandbox as a dependency, and use it as a passthrough to get all the necessary data
 
   // source streams
   carId$: Observable<string>;
 
-  // intermediate streams
-  options$: Observable<Option[]>;
-  selectedOptions$: Observable<Option[]>;
-  combinedOptions$: Observable<Option[]>;
-
   // presentation streams
   activeSelection$: Observable<Car>;
-  packs$: Observable<Option[]>;
-  singleOptions$: Observable<Option[]>;
-  leasePrice$: Observable<number>;
 
   constructor(private activatedRoute: ActivatedRoute,
               private carService: CarService,
@@ -79,35 +71,15 @@ export class OptionsContainer implements OnInit {
       refCount()
     );
 
-    // intermediate streams
-    this.options$ = this.carId$.pipe(
-      mergeMap(carId => this.optionService.find(carId))
-    );
-
-    // TODO
-    this.selectedOptions$ = new Subject();
-    // TODO
-    // unionBy(selectedCatalogOptions, catalogOptions, 'optionId')
-    this.combinedOptions$ = new Subject();
-
     // presentation streams
     this.activeSelection$ = this.carId$.pipe(
       mergeMap(carId => this.carService.findOne(carId))
     );
-
-    // TODO
-    this.packs$ = new Subject();
-    // TODO
-    this.singleOptions$ = new Subject();
-    // TODO
-    this.leasePrice$ = new Subject();
   }
 
   onAddOption(option: Option): void {
-    // TODO
   }
 
   onRemoveOption(optionId: string): void {
-    // TODO
   }
 }
