@@ -41,8 +41,7 @@ import { OptionService } from '../../services/option.service';
                          (removeOption)="onRemoveOption($event)"></app-option-list>
       </div>
       <div class="col-sm-5 col-md-4">
-        <app-side-bar [car]="activeSelection$ | async">
-        </app-side-bar>
+        <app-side-bar [car]="activeSelection$ | async"></app-side-bar>
       </div>
     </div>
   `
@@ -81,10 +80,7 @@ export class OptionsContainer implements OnInit {
       mergeMap(carId => this.optionService.find(carId))
     );
 
-    // TODO
     this.selectedOptions$ = new Subject();
-    // TODO
-    // unionBy(selectedCatalogOptions, catalogOptions, 'optionId')
     this.combinedOptions$ = new Subject();
 
     // presentation streams
@@ -92,19 +88,13 @@ export class OptionsContainer implements OnInit {
       mergeMap(carId => this.carService.findOne(carId))
     );
 
-    // TODO
     this.packs$ = new Subject();
-    // TODO
     this.singleOptions$ = new Subject();
-    // TODO
-    this.leasePrice$ = new Subject();
   }
 
   onAddOption(option: Option): void {
-    // TODO
   }
 
   onRemoveOption(optionId: string): void {
-    // TODO
   }
 }
