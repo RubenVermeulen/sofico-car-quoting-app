@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 import { Car } from '../../types/car.type';
 import { FormGroup } from '@angular/forms';
-import { Option } from '../../types/option.type';
+import { FilterValue } from '../../types/filter-value.type';
 
 @Component({
   selector: 'app-side-bar',
@@ -15,13 +15,18 @@ import { Option } from '../../types/option.type';
     <app-active-car-selection *ngIf="car" [car]="car"></app-active-car-selection>
 
     <app-filters *ngIf="filtersEnabled"
-                 [form]="form"></app-filters>
+                 [form]="form"
+                 [filterMakes]="filterMakes"
+                 [filterFuelTypes]="filterFuelTypes"
+                 [filterGearboxes]="filterGearboxes"></app-filters>
   `
 })
 export class SideBarComponent {
   @Input() car: Car;
   @Input() form: FormGroup;
-  @Input() selectedOptions: Option[];
+  @Input() filterMakes: FilterValue[];
+  @Input() filterFuelTypes: FilterValue[];
+  @Input() filterGearboxes: FilterValue[];
 
   @Input() filtersEnabled = false;
 }

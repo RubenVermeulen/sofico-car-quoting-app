@@ -41,10 +41,7 @@ import { OptionService } from '../../services/option.service';
                          (removeOption)="onRemoveOption($event)"></app-option-list>
       </div>
       <div class="col-4">
-        <app-side-bar [car]="activeSelection$ | async"
-                      [selectedOptions]="selectedOptions$ | async"
-                      [leasePrice]="leasePrice$ | async"
-                      [selectedOptionsEnabled]="true">
+        <app-side-bar [car]="activeSelection$ | async">
         </app-side-bar>
       </div>
     </div>
