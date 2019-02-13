@@ -20,8 +20,7 @@ import {
   sortBy,
   unionBy
 } from 'lodash';
-import { CarService } from '../../services/car.service';
-import { OptionService } from '../../services/option.service';
+import { AppSandbox } from '../../app.sandbox';
 
 @Component({
   selector: 'app-options',
@@ -66,8 +65,7 @@ export class OptionsContainer implements OnInit {
   leasePrice$: Observable<number>;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private carService: CarService,
-              private optionService: OptionService) {
+              private sb: AppSandbox) {
   }
 
   ngOnInit(): void {
@@ -81,7 +79,7 @@ export class OptionsContainer implements OnInit {
 
     // intermediate streams
     this.options$ = this.carId$.pipe(
-      mergeMap(carId => this.optionService.find(carId))
+      mergeMap(carId => this.sb.getOptions(carId))
     );
 
     // TODO
@@ -92,7 +90,7 @@ export class OptionsContainer implements OnInit {
 
     // presentation streams
     this.activeSelection$ = this.carId$.pipe(
-      mergeMap(carId => this.carService.findOne(carId))
+      mergeMap(carId => this.sb.getCar(carId))
     );
 
     // TODO

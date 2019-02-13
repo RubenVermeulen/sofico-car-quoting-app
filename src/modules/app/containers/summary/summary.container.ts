@@ -12,7 +12,7 @@ import {
 } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { sortBy } from 'lodash';
-import { CarService } from '../../services/car.service';
+import { AppSandbox } from '../../app.sandbox';
 
 @Component({
   selector: 'app-summary',
@@ -41,7 +41,7 @@ export class SummaryContainer implements OnInit {
   selectedOptions$: Observable<Option[]>;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private carService: CarService) {
+              private sb: AppSandbox) {
   }
 
   ngOnInit(): void {
@@ -54,7 +54,7 @@ export class SummaryContainer implements OnInit {
 
     // presentation streams
     this.activeSelection$ = this.carId$.pipe(
-      mergeMap(carId => this.carService.findOne(carId))
+      mergeMap(carId => this.sb.getCar(carId))
     );
   }
 }

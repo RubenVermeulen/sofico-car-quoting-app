@@ -18,9 +18,8 @@ import {
   startWith
 } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
-import { FilterService } from '../../services/filter.service';
-import { CarService } from '../../services/car.service';
 import { FilterValue } from '../../types/filter-value.type';
+import { AppSandbox } from '../../app.sandbox';
 
 @Component({
   selector: 'app-cars',
@@ -61,8 +60,7 @@ export class CarsContainer implements OnInit {
 
   constructor(private fb: FormBuilder,
               private activatedRoute: ActivatedRoute,
-              private filterService: FilterService,
-              private carService: CarService) {
+              private sb: AppSandbox) {
   }
 
   ngOnInit(): void {
@@ -72,16 +70,16 @@ export class CarsContainer implements OnInit {
       gearboxes: [[]]
     });
 
-    this.filterMakes = this.filterService.filterMakes;
-    this.filterFuelTypes = this.filterService.filterFuelTypes;
-    this.filterGearboxes = this.filterService.filterGearboxes;
+    this.filterMakes = this.sb.getFilterMakes();
+    this.filterFuelTypes = this.sb.getFilterFuelTypes();
+    this.filterGearboxes = this.sb.getFilterGearboxes();
 
     // source streams
     this.carId$ = this.activatedRoute.params.pipe(
       filter(params => params && params.carId),
       map(params => params.carId)
     );
-    this.cars$ = this.carService.find();
+    this.cars$ = this.sb.getCars();
 
     // presentation streams
     this.filteredCars$ = combineLatest(
@@ -100,7 +98,7 @@ export class CarsContainer implements OnInit {
       })
     );
     this.activeSelection$ = this.carId$.pipe(
-      mergeMap(carId => this.carService.findOne(carId))
+      mergeMap(carId => this.sb.getCar(carId))
     );
   }
 
