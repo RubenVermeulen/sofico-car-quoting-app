@@ -48,6 +48,9 @@ import { OptionService } from '../../services/option.service';
   `
 })
 export class OptionsContainer implements OnInit {
+  // TODO: remove both the car and the option service as dependency from this container (smart component)
+  // TODO: add the sandbox as a dependency, and use it as a passthrough to get all the necessary data
+
   // source streams
   carId$: Observable<string>;
 

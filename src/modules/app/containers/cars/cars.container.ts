@@ -42,6 +42,9 @@ import { FilterValue } from '../../types/filter-value.type';
     </div>`
 })
 export class CarsContainer implements OnInit {
+  // TODO: remove both the filter and the car service as dependency from this container (smart component)
+  // TODO: add the sandbox as a dependency, and use it as a passthrough to get all the necessary data
+
   form: FormGroup;
 
   filterMakes: FilterValue[];

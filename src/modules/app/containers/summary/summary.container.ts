@@ -30,6 +30,9 @@ import { CarService } from '../../services/car.service';
   `
 })
 export class SummaryContainer implements OnInit {
+  // TODO: remove the car service as dependency from this container (smart component)
+  // TODO: add the sandbox as a dependency, and use it as a passthrough to get all the necessary data
+
   // source streams
   carId$: Observable<string>;
 
