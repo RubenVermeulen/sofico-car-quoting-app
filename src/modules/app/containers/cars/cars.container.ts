@@ -7,14 +7,15 @@ import {
   FormGroup
 } from '@angular/forms';
 import {
-  Observable,
-  Subject
+  combineLatest,
+  Observable
 } from 'rxjs';
 import { Car } from '../../types/car.type';
 import {
   filter,
   map,
-  mergeMap
+  mergeMap,
+  startWith
 } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { FilterService } from '../../services/filter.service';
@@ -84,9 +85,46 @@ export class CarsContainer implements OnInit {
     // TODO: (hint: combineLatest - https://www.learnrxjs.io/operators/combination/combinelatest.html)
     // TODO: to fetch data from a form in a reactive way: form.get('YOUR_FORM_CONTROL').valueChanges
     // TODO: a form won't emit any values initially (hint: startWith)
-    this.filteredCars$ = new Subject();
+    this.filteredCars$ = combineLatest(
+      this.cars$,
+      this.form.get('makes').valueChanges.pipe(startWith([])),
+      this.form.get('fuelTypes').valueChanges.pipe(startWith([])),
+      this.form.get('gearboxes').valueChanges.pipe(startWith([]))
+    ).pipe(
+      map(([cars, filterMakes, filterFuelTypes, filterGearboxes]) => {
+        return this.filterCars(
+          cars,
+          filterMakes,
+          filterFuelTypes,
+          filterGearboxes
+        );
+      })
+    );
     this.activeSelection$ = this.carId$.pipe(
       mergeMap(carId => this.carService.findOne(carId))
     );
+  }
+
+  private filterCars(
+    cars: Car[],
+    filterMakes: FilterValue[],
+    filterFuelTypes: FilterValue[],
+    filterGearboxes: FilterValue[]
+  ): Car[] {
+    let tmpCars = cars;
+
+    if (filterMakes.length > 0) {
+      tmpCars = tmpCars.filter(car => !!filterMakes.find(filter => filter.filterId === car.make.makeId));
+    }
+
+    if (filterFuelTypes.length > 0) {
+      tmpCars = tmpCars.filter(car => !!filterFuelTypes.find(filter => filter.filterId === car.fuelType.fuelTypeId));
+    }
+
+    if (filterGearboxes.length > 0) {
+      tmpCars = tmpCars.filter(car => !!filterGearboxes.find(filter => filter.filterId === car.gearbox.gearboxId));
+    }
+
+    return tmpCars;
   }
 }
