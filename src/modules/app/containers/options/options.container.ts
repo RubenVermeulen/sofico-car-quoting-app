@@ -75,7 +75,9 @@ export class OptionsContainer implements OnInit {
 
     // intermediate streams
     // TODO: fetch all options, based on this.carId$ (hint: mergeMap)
-    this.options$ = new Subject();
+    this.options$ = this.carId$.pipe(
+      mergeMap(carId => this.sb.getOptions(carId))
+    );
 
     this.selectedOptions$ = new Subject();
     this.combinedOptions$ = new Subject();
@@ -86,9 +88,9 @@ export class OptionsContainer implements OnInit {
     );
 
     // TODO: based on the this.options$ extract only the options that have optionType === 'pack' (hint: map)
-    this.packs$ = new Subject();
+    this.packs$ = this.options$.pipe(map(options => options.filter(option => option.optionType === 'pack')));
     /// TODO: based on the this.options$ extract only the options that have optionType === 'option' (hint: map)
-    this.singleOptions$ = new Subject();
+    this.singleOptions$ = this.options$.pipe(map(options => options.filter(option => option.optionType === 'option')));
   }
 
   onAddOption(option: Option): void {
