@@ -3,7 +3,10 @@ import {
   OnInit
 } from '@angular/core';
 import { Option } from '../../types/option.type';
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  Subject
+} from 'rxjs';
 import { Car } from '../../types/car.type';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -64,9 +67,7 @@ export class OptionsContainer implements OnInit {
     );
 
     // intermediate streams
-    this.options$ = this.carId$.pipe(
-      mergeMap(carId => this.optionService.find(carId))
-    );
+    this.options$ = new Subject();
 
     // presentation streams
     this.activeSelection$ = this.carId$.pipe(
