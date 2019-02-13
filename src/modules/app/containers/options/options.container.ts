@@ -31,12 +31,12 @@ import { OptionService } from '../../services/option.service';
       <div class="col-sm-7 col-md-8">
         <h2>Packs</h2>
         <br>
-        <app-option-list [options]="packs$ | async"
+        <app-option-list [options]="[]"
                          (addOption)="onAddOption($event)"
                          (removeOption)="onRemoveOption($event)"></app-option-list>
         <h2>Options</h2>
         <br>
-        <app-option-list [options]="singleOptions$ | async"
+        <app-option-list [options]="[]"
                          (addOption)="onAddOption($event)"
                          (removeOption)="onRemoveOption($event)"></app-option-list>
       </div>
@@ -50,16 +50,8 @@ export class OptionsContainer implements OnInit {
   // source streams
   carId$: Observable<string>;
 
-  // intermediate streams
-  options$: Observable<Option[]>;
-  selectedOptions$: Observable<Option[]>;
-  combinedOptions$: Observable<Option[]>;
-
   // presentation streams
   activeSelection$: Observable<Car>;
-  packs$: Observable<Option[]>;
-  singleOptions$: Observable<Option[]>;
-  leasePrice$: Observable<number>;
 
   constructor(private activatedRoute: ActivatedRoute,
               private carService: CarService,
@@ -75,21 +67,10 @@ export class OptionsContainer implements OnInit {
       refCount()
     );
 
-    // intermediate streams
-    this.options$ = this.carId$.pipe(
-      mergeMap(carId => this.optionService.find(carId))
-    );
-
-    this.selectedOptions$ = new Subject();
-    this.combinedOptions$ = new Subject();
-
     // presentation streams
     this.activeSelection$ = this.carId$.pipe(
       mergeMap(carId => this.carService.findOne(carId))
     );
-
-    this.packs$ = new Subject();
-    this.singleOptions$ = new Subject();
   }
 
   onAddOption(option: Option): void {
