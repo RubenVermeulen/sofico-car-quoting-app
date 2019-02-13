@@ -5,9 +5,9 @@ import { ActionTypes } from '../action-types';
 export function optionsReducer(state: Option[] = [], action: OptionsActions): Option[] {
   switch (action.type) {
     case ActionTypes.ADD_OPTION:
-      return [...state, {...action.payload.option, isSelected: true}];
+      return null;
     case ActionTypes.REMOVE_OPTION:
-      return state.filter(option => option.optionId !== action.payload.optionId);
+      return null;
     case ActionTypes.CLEAR_OPTIONS:
       return [];
     default:
