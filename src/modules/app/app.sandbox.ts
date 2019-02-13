@@ -14,7 +14,8 @@ import { ApplicationState } from '../statemanagement/application.state';
 import {
   AddOptionAction,
   ClearOptionsAction,
-  RemoveOptionAction
+  RemoveOptionAction,
+  SetLeasePriceAction
 } from '../statemanagement/actions';
 import { LeasePriceService } from './services/lease-price.service';
 import {
@@ -72,10 +73,12 @@ export class AppSandbox {
 
   calculate(carId: string, optionIds: string[]): Observable<boolean> {
     // TODO: dispatch an action to set the lease price to null
+    this.store.dispatch(new SetLeasePriceAction(null));
 
     return this.leasePriceService.calculate(carId, optionIds).pipe(
       tap(leasePrice => {
         // TODO: dispatch the correct action to set the lease price
+        this.store.dispatch(new SetLeasePriceAction(leasePrice));
       }),
       mapTo(true)
     );
