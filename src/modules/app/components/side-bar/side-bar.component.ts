@@ -15,6 +15,8 @@ import { Option } from '../../types/option.type';
   template: `
     <app-active-car-selection *ngIf="car" [car]="car"></app-active-car-selection>
 
+    <app-lease-price [leasePrice]="leasePrice"></app-lease-price>
+    
     <app-selected-option-list *ngIf="selectedOptionsEnabled" [options]="selectedOptions"></app-selected-option-list>
     
     <app-filters *ngIf="filtersEnabled"
@@ -31,6 +33,7 @@ export class SideBarComponent {
   @Input() filterFuelTypes: FilterValue[];
   @Input() filterGearboxes: FilterValue[];
   @Input() selectedOptions: Option[];
+  @Input() leasePrice: number;
 
   @Input() filtersEnabled = false;
   @Input() selectedOptionsEnabled = false;

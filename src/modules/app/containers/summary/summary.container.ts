@@ -21,10 +21,12 @@ import { AppSandbox } from '../../app.sandbox';
       <div class="col-sm-7 col-md-8">
         <h2>Selected options</h2>
         <br>
-        <app-option-list [options]="selectedOptions$ | async" [disabled]="true"></app-option-list>
+        <app-option-list [options]="selectedOptions$ | async"
+                         [disabled]="true"></app-option-list>
       </div>
       <div class="col-sm-5 col-md-4">
-        <app-side-bar [car]="activeSelection$ | async"></app-side-bar>
+        <app-side-bar [car]="activeSelection$ | async"
+                      [leasePrice]="leasePrice$ | async"></app-side-bar>
       </div>
     </div>
   `
@@ -36,6 +38,7 @@ export class SummaryContainer implements OnInit {
   // presentation streams
   activeSelection$: Observable<Car>;
   selectedOptions$: Observable<Option[]>;
+  leasePrice$: Observable<number>;
 
   constructor(private activatedRoute: ActivatedRoute,
               private sb: AppSandbox) {
@@ -54,5 +57,6 @@ export class SummaryContainer implements OnInit {
       mergeMap(carId => this.sb.getCar(carId))
     );
     this.selectedOptions$ = this.sb.selectedOptions$;
+    this.leasePrice$ = this.sb.leasePrice$;
   }
 }

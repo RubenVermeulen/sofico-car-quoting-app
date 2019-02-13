@@ -2,11 +2,7 @@ import { Injectable } from '@angular/core';
 import { CarService } from './services/car.service';
 import { FilterService } from './services/filter.service';
 import { OptionService } from './services/option.service';
-import {
-  never,
-  Observable,
-  Subject
-} from 'rxjs';
+import { Observable } from 'rxjs';
 import { Car } from './types/car.type';
 import { FilterValue } from './types/filter-value.type';
 import { Option } from './types/option.type';
@@ -20,16 +16,21 @@ import {
   ClearOptionsAction,
   RemoveOptionAction
 } from '../statemanagement/actions';
+import { LeasePriceService } from './services/lease-price.service';
+import {
+  mapTo,
+  tap
+} from 'rxjs/operators';
 
 @Injectable()
 export class AppSandbox {
   leasePrice$ = this.store.pipe(select(state => state.leasePrice));
-  // TODO: read the selectedOption from the store (hint: see leasePrice)
   selectedOptions$ = this.store.pipe(select(state => state.options));
 
   constructor(private carService: CarService,
               private filterService: FilterService,
               private optionService: OptionService,
+              private leasePriceService: LeasePriceService,
               private store: Store<ApplicationState>) {
   }
 
@@ -62,12 +63,21 @@ export class AppSandbox {
   }
 
   addOption(option): void {
-    // TODO: dispatch the new option to the store, with the correct instance of an action class
     this.store.dispatch(new AddOptionAction(option));
   }
 
   removeOption(optionId): void {
-    // TODO: dispatch the optionId to the store, with the correct instance of an action class
     this.store.dispatch(new RemoveOptionAction(optionId));
+  }
+
+  calculate(carId: string, optionIds: string[]): Observable<boolean> {
+    // TODO: dispatch an action to set the lease price to null
+
+    return this.leasePriceService.calculate(carId, optionIds).pipe(
+      tap(leasePrice => {
+        // TODO: dispatch the correct action to set the lease price
+      }),
+      mapTo(true)
+    );
   }
 }

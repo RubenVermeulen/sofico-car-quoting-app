@@ -15,7 +15,6 @@ export class AddOptionAction {
 }
 
 export class RemoveOptionAction {
-  // TODO: adds missing implementation (hint: see AddOptionAction)
   type = ActionTypes.REMOVE_OPTION;
   payload: { optionId: string };
 

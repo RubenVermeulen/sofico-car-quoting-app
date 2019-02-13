@@ -35,7 +35,8 @@ import { AppSandbox } from '../../app.sandbox';
                       [filterMakes]="filterMakes"
                       [filterFuelTypes]="filterFuelTypes"
                       [filterGearboxes]="filterGearboxes"
-                      [filtersEnabled]="true">
+                      [filtersEnabled]="true"
+                      [leasePrice]="leasePrice$ | async">
         </app-side-bar>
       </div>
     </div>`
@@ -54,6 +55,7 @@ export class CarsContainer implements OnInit {
   // presentation streams
   filteredCars$: Observable<Car[]>;
   activeSelection$: Observable<Car>;
+  leasePrice$: Observable<number>;
 
   constructor(private fb: FormBuilder,
               private activatedRoute: ActivatedRoute,
@@ -97,6 +99,7 @@ export class CarsContainer implements OnInit {
     this.activeSelection$ = this.carId$.pipe(
       mergeMap(carId => this.sb.getCar(carId))
     );
+    this.leasePrice$ = this.sb.leasePrice$;
   }
 
   private filterCars(

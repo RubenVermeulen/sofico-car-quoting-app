@@ -66,6 +66,9 @@ export class ConfiguratorContainer implements OnInit, OnDestroy {
     this.carId$.pipe(
       takeUntil(this.destroy$)
     ).subscribe(() => this.sb.clearOptions());
+
+    // TODO: combine both the carId$ and selectedOptions$ and execute the calculation (hint: switchMap)
+    // TODO: make sure you subscribe to your stream
   }
 
   ngOnDestroy(): void {
