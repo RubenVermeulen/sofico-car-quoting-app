@@ -6,7 +6,10 @@ import {
   FormBuilder,
   FormGroup
 } from '@angular/forms';
-import { Observable } from 'rxjs';
+import {
+  Observable,
+  Subject
+} from 'rxjs';
 import { Car } from '../../types/car.type';
 import {
   filter,
@@ -24,7 +27,7 @@ import { FilterValue } from '../../types/filter-value.type';
   template: `
     <div class="row">
       <div class="col-sm-7 col-md-8">
-        <app-car-list [cars]="cars$ | async"></app-car-list>
+        <app-car-list [cars]="filteredCars$ | async"></app-car-list>
       </div>
       <div class="col-sm-5 col-md-4">
         <app-side-bar [car]="activeSelection$ | async"
@@ -46,10 +49,11 @@ export class CarsContainer implements OnInit {
 
   // source streams
   carId$: Observable<string>;
+  cars$: Observable<Car[]>;
 
   // presentation streams
+  filteredCars$: Observable<Car[]>;
   activeSelection$: Observable<Car>;
-  cars$: Observable<Car[]>;
 
   constructor(private fb: FormBuilder,
               private activatedRoute: ActivatedRoute,
@@ -73,11 +77,16 @@ export class CarsContainer implements OnInit {
       filter(params => params && params.carId),
       map(params => params.carId)
     );
+    this.cars$ = this.carService.find();
 
     // presentation streams
+    // TODO: to determine the filtered values you have to combine the cars with the form values
+    // TODO: (hint: combineLatest - https://www.learnrxjs.io/operators/combination/combinelatest.html)
+    // TODO: to fetch data from a form in a reactive way: form.get('YOUR_FORM_CONTROL').valueChanges
+    // TODO: a form won't emit any values initially (hint: startWith)
+    this.filteredCars$ = new Subject();
     this.activeSelection$ = this.carId$.pipe(
       mergeMap(carId => this.carService.findOne(carId))
     );
-    this.cars$ = this.carService.find();
   }
 }
