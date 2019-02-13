@@ -21,7 +21,6 @@ import { Option } from '../../types/option.type';
 export class SideBarComponent {
   @Input() car: Car;
   @Input() form: FormGroup;
-  @Input() selectedOptions: Option[];
 
   @Input() filtersEnabled = false;
 }

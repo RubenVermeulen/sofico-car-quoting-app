@@ -34,12 +34,6 @@ import { CarService } from '../../services/car.service';
     </div>`
 })
 export class CarsContainer implements OnInit {
-  // TODO: create a stream that filters the cars based on the form input
-  // TODO: to determine the filtered values you have to combine the cars with the form values
-  // TODO: (hint: combineLatest - https://www.learnrxjs.io/operators/combination/combinelatest.html)
-  // TODO: to fetch data from a form in a reactive way: form.get('YOUR_FORM_CONTROL').valueChanges
-  // TODO: a form won't emit any values initially (hint: startWith)
-
   form: FormGroup;
 
   // source streams
