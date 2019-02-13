@@ -52,8 +52,6 @@ export class OptionsContainer implements OnInit {
 
   // intermediate streams
   options$: Observable<Option[]>;
-  selectedOptions$: Observable<Option[]>;
-  combinedOptions$: Observable<Option[]>;
 
   // presentation streams
   activeSelection$: Observable<Car>;
@@ -76,9 +74,6 @@ export class OptionsContainer implements OnInit {
     // intermediate streams
     // TODO: fetch all options, based on this.carId$ (hint: mergeMap)
     this.options$ = new Subject();
-
-    this.selectedOptions$ = new Subject();
-    this.combinedOptions$ = new Subject();
 
     // presentation streams
     this.activeSelection$ = this.carId$.pipe(
