@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="row">
-      <div *ngFor="let car of cars$ | async; trackBy: tracker" class="col-sm-2 col-md-6">
+      <div *ngFor="let car of cars$ | async; trackBy: tracker" class="col-sm-12 col-md-6">
         <app-car-list-item [car]="car" [routerLink]="['/', 'configurator', car?.carId, 'options']"></app-car-list-item>
       </div>
     </div>

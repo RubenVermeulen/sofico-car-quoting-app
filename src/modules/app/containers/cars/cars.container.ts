@@ -22,10 +22,10 @@ import { CarService } from '../../services/car.service';
   styleUrls: ['./cars.container.scss'],
   template: `
     <div class="row">
-      <div class="col-8">
+      <div class="col-sm-7 col-md-8">
         <app-car-list></app-car-list>
       </div>
-      <div class="col-4">
+      <div class="col-sm-5 col-md-4">
         <app-side-bar [car]="activeSelection$ | async"
                       [form]="form"
                       [filtersEnabled]="true">
