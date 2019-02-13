@@ -3,10 +3,7 @@ import {
   OnInit
 } from '@angular/core';
 import { Option } from '../../types/option.type';
-import {
-  Observable,
-  Subject
-} from 'rxjs';
+import { Observable } from 'rxjs';
 import { Car } from '../../types/car.type';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -52,8 +49,6 @@ export class OptionsContainer implements OnInit {
 
   // intermediate streams
   options$: Observable<Option[]>;
-  selectedOptions$: Observable<Option[]>;
-  combinedOptions$: Observable<Option[]>;
 
   // presentation streams
   activeSelection$: Observable<Car>;
@@ -78,9 +73,6 @@ export class OptionsContainer implements OnInit {
     this.options$ = this.carId$.pipe(
       mergeMap(carId => this.sb.getOptions(carId))
     );
-
-    this.selectedOptions$ = new Subject();
-    this.combinedOptions$ = new Subject();
 
     // presentation streams
     this.activeSelection$ = this.carId$.pipe(
