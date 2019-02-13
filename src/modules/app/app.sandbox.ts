@@ -15,12 +15,17 @@ import {
   Store
 } from '@ngrx/store';
 import { ApplicationState } from '../statemanagement/application.state';
+import {
+  AddOptionAction,
+  ClearOptionsAction,
+  RemoveOptionAction
+} from '../statemanagement/actions';
 
 @Injectable()
 export class AppSandbox {
   leasePrice$ = this.store.pipe(select(state => state.leasePrice));
   // TODO: read the selectedOption from the store (hint: see leasePrice)
-  selectedOptions$ = new Subject();
+  selectedOptions$ = this.store.pipe(select(state => state.options));
 
   constructor(private carService: CarService,
               private filterService: FilterService,
@@ -52,11 +57,17 @@ export class AppSandbox {
     return this.optionService.find(carId);
   }
 
+  clearOptions(): void {
+    this.store.dispatch(new ClearOptionsAction());
+  }
+
   addOption(option): void {
     // TODO: dispatch the new option to the store, with the correct instance of an action class
+    this.store.dispatch(new AddOptionAction(option));
   }
 
   removeOption(optionId): void {
     // TODO: dispatch the optionId to the store, with the correct instance of an action class
+    this.store.dispatch(new RemoveOptionAction(optionId));
   }
 }

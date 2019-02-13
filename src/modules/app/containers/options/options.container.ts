@@ -4,8 +4,8 @@ import {
 } from '@angular/core';
 import { Option } from '../../types/option.type';
 import {
-  Observable,
-  Subject
+  combineLatest,
+  Observable
 } from 'rxjs';
 import { Car } from '../../types/car.type';
 import { ActivatedRoute } from '@angular/router';
@@ -14,7 +14,8 @@ import {
   map,
   mergeMap,
   publishReplay,
-  refCount
+  refCount,
+  tap
 } from 'rxjs/operators';
 import {
   sortBy,
@@ -40,7 +41,9 @@ import { AppSandbox } from '../../app.sandbox';
                          (removeOption)="onRemoveOption($event)"></app-option-list>
       </div>
       <div class="col-sm-5 col-md-4">
-        <app-side-bar [car]="activeSelection$ | async">
+        <app-side-bar [car]="activeSelection$ | async"
+                      [selectedOptions]="selectedOptions$ | async"
+                      selectedOptionsEnabled="true">
         </app-side-bar>
       </div>
     </div>
@@ -79,11 +82,17 @@ export class OptionsContainer implements OnInit {
     );
 
     // TODO: get the selected options from the sandbox
-    this.selectedOptions$ = new Subject();
-    // TODO: combine both the selectedOptions$ and the options$
+    this.selectedOptions$ = this.sb.selectedOptions$;
+    // TODO: combine both the selectedOptions$ and the options$ (hint: combineLatest - https://www.learnrxjs.io/operators/combination/combinelatest.html)
     // TODO: then union both using the following code snippet: unionBy(selectedCatalogOptions, catalogOptions, 'optionId')
     // TODO: EXTRA: sort the result of the union with the sortBy function of lodash (https://lodash.com/docs/4.17.11#sortBy)
-    this.combinedOptions$ = new Subject();
+    this.combinedOptions$ = combineLatest(
+      this.options$,
+      this.selectedOptions$
+    ).pipe(
+      map(([options, selectedOptions]) => unionBy(selectedOptions, options, 'optionId')),
+      map(options => sortBy(options, 'description'))
+    );
 
     // presentation streams
     this.activeSelection$ = this.carId$.pipe(
@@ -91,20 +100,22 @@ export class OptionsContainer implements OnInit {
     );
 
     // TODO: replace this.options$ with the this.combinedOptions$
-    this.packs$ = this.options$.pipe(
+    this.packs$ = this.combinedOptions$.pipe(
       map(options => options.filter(option => option.optionType === 'pack'))
     );
     // TODO: replace this.options$ with the this.combinedOptions$
-    this.singleOptions$ = this.options$.pipe(
+    this.singleOptions$ = this.combinedOptions$.pipe(
       map(options => options.filter(option => option.optionType === 'option'))
     );
   }
 
   onAddOption(option: Option): void {
     // TODO: call the correct method from the sandbox
+    this.sb.addOption(option);
   }
 
   onRemoveOption(optionId: string): void {
     // TODO: call the correct method from the sandbox
+    this.sb.removeOption(optionId);
   }
 }

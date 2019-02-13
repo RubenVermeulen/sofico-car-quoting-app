@@ -16,6 +16,12 @@ export class AddOptionAction {
 
 export class RemoveOptionAction {
   // TODO: adds missing implementation (hint: see AddOptionAction)
+  type = ActionTypes.REMOVE_OPTION;
+  payload: { optionId: string };
+
+  constructor(optionId: string) {
+    this.payload = {optionId};
+  }
 }
 
 export type OptionsActions =

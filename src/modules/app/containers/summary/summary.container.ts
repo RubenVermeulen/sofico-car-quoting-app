@@ -53,5 +53,6 @@ export class SummaryContainer implements OnInit {
     this.activeSelection$ = this.carId$.pipe(
       mergeMap(carId => this.sb.getCar(carId))
     );
+    this.selectedOptions$ = this.sb.selectedOptions$;
   }
 }
