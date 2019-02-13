@@ -9,8 +9,6 @@ import { Option } from './types/option.type';
 
 @Injectable()
 export class AppSandbox {
-  // TODO: add a method that fetches all options based on the carId (hint: optionService)
-
   constructor(private carService: CarService,
               private filterService: FilterService,
               private optionService: OptionService) {
