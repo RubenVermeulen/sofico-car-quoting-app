@@ -46,9 +46,6 @@ export class OptionsContainer implements OnInit {
   // source streams
   carId$: Observable<string>;
 
-  // intermediate streams
-  options$: Observable<Option[]>;
-
   // presentation streams
   activeSelection$: Observable<Car>;
 
@@ -65,9 +62,6 @@ export class OptionsContainer implements OnInit {
       publishReplay(1),
       refCount()
     );
-
-    // intermediate streams
-    this.options$ = new Subject();
 
     // presentation streams
     this.activeSelection$ = this.carId$.pipe(
