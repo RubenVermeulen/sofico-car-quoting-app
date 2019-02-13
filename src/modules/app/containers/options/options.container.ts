@@ -47,9 +47,6 @@ import { AppSandbox } from '../../app.sandbox';
   `
 })
 export class OptionsContainer implements OnInit {
-  // TODO: remove both the car and the option service as dependency from this container (smart component)
-  // TODO: add the sandbox as a dependency, and use it as a passthrough to get all the necessary data
-
   // source streams
   carId$: Observable<string>;
 
@@ -62,7 +59,6 @@ export class OptionsContainer implements OnInit {
   activeSelection$: Observable<Car>;
   packs$: Observable<Option[]>;
   singleOptions$: Observable<Option[]>;
-  leasePrice$: Observable<number>;
 
   constructor(private activatedRoute: ActivatedRoute,
               private sb: AppSandbox) {
@@ -78,14 +74,10 @@ export class OptionsContainer implements OnInit {
     );
 
     // intermediate streams
-    this.options$ = this.carId$.pipe(
-      mergeMap(carId => this.sb.getOptions(carId))
-    );
+    // TODO: fetch all options, based on this.carId$ (hint: mergeMap)
+    this.options$ = new Subject();
 
-    // TODO
     this.selectedOptions$ = new Subject();
-    // TODO
-    // unionBy(selectedCatalogOptions, catalogOptions, 'optionId')
     this.combinedOptions$ = new Subject();
 
     // presentation streams
@@ -93,19 +85,17 @@ export class OptionsContainer implements OnInit {
       mergeMap(carId => this.sb.getCar(carId))
     );
 
-    // TODO
+    // TODO: based on the this.options$ extract only the options that have optionType === 'pack' (hint: map)
     this.packs$ = new Subject();
-    // TODO
+    /// TODO: based on the this.options$ extract only the options that have optionType === 'option' (hint: map)
     this.singleOptions$ = new Subject();
-    // TODO
-    this.leasePrice$ = new Subject();
   }
 
   onAddOption(option: Option): void {
-    // TODO
+
   }
 
   onRemoveOption(optionId: string): void {
-    // TODO
+
   }
 }
