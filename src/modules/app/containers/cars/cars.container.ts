@@ -6,22 +6,16 @@ import {
   FormBuilder,
   FormGroup
 } from '@angular/forms';
-import {
-  BehaviorSubject,
-  combineLatest,
-  Observable
-} from 'rxjs';
+import { Observable } from 'rxjs';
 import { Car } from '../../types/car.type';
 import {
-  debounceTime,
   filter,
   map,
-  mergeMap,
-  startWith
+  mergeMap
 } from 'rxjs/operators';
-import { FilterValue } from '../../types/filter-value.type';
 import { ActivatedRoute } from '@angular/router';
-import { AppSandbox } from '../../app.sandbox';
+import { FilterService } from '../../services/filter.service';
+import { CarService } from '../../services/car.service';
 
 @Component({
   selector: 'app-cars',
@@ -29,56 +23,38 @@ import { AppSandbox } from '../../app.sandbox';
   template: `
     <div class="row">
       <div class="col-8">
-        <div class="form-group">
-          <input type="text" 
-                 class="form-control" 
-                 placeholder="Search your car" 
-                 (keyup)="searchTerm$.next($event.target.value)">
-        </div>
-        <app-car-list [cars]="filteredCars$ | async"></app-car-list>
+        <app-car-list></app-car-list>
       </div>
       <div class="col-4">
         <app-side-bar [car]="activeSelection$ | async"
                       [form]="form"
-                      [filterMakes]="filterMakes"
-                      [filterFuelTypes]="filterFuelTypes"
-                      [filterGearboxes]="filterGearboxes"
-                      [filtersEnabled]="true"
-                      [leasePrice]="leasePrice$ | async">
+                      [filtersEnabled]="true">
         </app-side-bar>
       </div>
     </div>`
 })
 export class CarsContainer implements OnInit {
-  filterMakes: FilterValue[];
-  filterFuelTypes: FilterValue[];
-  filterGearboxes: FilterValue[];
+  // TODO: create a stream that filters the cars based on the form input
+  // TODO: to determine the filtered values you have to combine the cars with the form values
+  // TODO: (hint: combineLatest - https://www.learnrxjs.io/operators/combination/combinelatest.html)
+  // TODO: to fetch data from a form in a reactive way: form.get('YOUR_FORM_CONTROL').valueChanges
+  // TODO: a form won't emit any values initially (hint: startWith)
 
   form: FormGroup;
 
   // source streams
   carId$: Observable<string>;
-  cars$: Observable<Car[]>;
-  searchTerm$: BehaviorSubject<string>;
-
-  // intermediate streams
-  optimizedSeachTerm$: Observable<string>;
 
   // presentation streams
-  filteredCars$: Observable<Car[]>;
   activeSelection$: Observable<Car>;
-  leasePrice$: Observable<number>;
 
-  constructor(private sb: AppSandbox,
-              private fb: FormBuilder,
-              private activatedRoute: ActivatedRoute) {
+  constructor(private fb: FormBuilder,
+              private activatedRoute: ActivatedRoute,
+              private filterService: FilterService,
+              private carService: CarService) {
   }
 
   ngOnInit(): void {
-    this.filterMakes = this.sb.getFilterMakes();
-    this.filterFuelTypes = this.sb.getFilterFuelTypes();
-    this.filterGearboxes = this.sb.getFilterGearboxes();
-
     this.form = this.fb.group({
       makes: [[]],
       fuelTypes: [[]],
@@ -90,60 +66,9 @@ export class CarsContainer implements OnInit {
       filter(params => params && params.carId),
       map(params => params.carId)
     );
-    this.cars$ = this.sb.getCars();
-    this.searchTerm$ = new BehaviorSubject('');
 
-    // intermediate streams
-    this.optimizedSeachTerm$ = this.searchTerm$.pipe(debounceTime(200));
-
-    // presentation streams
-    this.filteredCars$ = combineLatest(
-      this.cars$,
-      this.optimizedSeachTerm$,
-      this.form.get('makes').valueChanges.pipe(startWith([])),
-      this.form.get('fuelTypes').valueChanges.pipe(startWith([])),
-      this.form.get('gearboxes').valueChanges.pipe(startWith([]))
-    ).pipe(
-      map(([cars, searchTerm, filterMakes, filterFuelTypes, filterGearboxes]) => {
-        const searchResult = cars.filter(car => {
-          const searchableString = car.make.name + car.model;
-          return searchableString.toLowerCase().includes(searchTerm.toLowerCase());
-        });
-
-        return this.filterCars(
-          searchResult,
-          filterMakes,
-          filterFuelTypes,
-          filterGearboxes
-        );
-      })
-    );
     this.activeSelection$ = this.carId$.pipe(
-      mergeMap(carId => this.sb.getCar(carId))
+      mergeMap(carId => this.carService.findOne(carId))
     );
-    this.leasePrice$ = this.sb.leasePrice$;
-  }
-
-  private filterCars(
-    cars: Car[],
-    filterMakes: FilterValue[],
-    filterFuelTypes: FilterValue[],
-    filterGearboxes: FilterValue[]
-  ): Car[] {
-    let tmpCars = cars;
-
-    if (filterMakes.length > 0) {
-      tmpCars = tmpCars.filter(car => !!filterMakes.find(filter => filter.filterId === car.make.makeId));
-    }
-
-    if (filterFuelTypes.length > 0) {
-      tmpCars = tmpCars.filter(car => !!filterFuelTypes.find(filter => filter.filterId === car.fuelType.fuelTypeId));
-    }
-
-    if (filterGearboxes.length > 0) {
-      tmpCars = tmpCars.filter(car => !!filterGearboxes.find(filter => filter.filterId === car.gearbox.gearboxId));
-    }
-
-    return tmpCars;
   }
 }

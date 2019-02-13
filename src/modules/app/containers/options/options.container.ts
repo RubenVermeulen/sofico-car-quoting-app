@@ -4,8 +4,8 @@ import {
 } from '@angular/core';
 import { Option } from '../../types/option.type';
 import {
-  combineLatest,
-  Observable
+  Observable,
+  Subject
 } from 'rxjs';
 import { Car } from '../../types/car.type';
 import { ActivatedRoute } from '@angular/router';
@@ -20,7 +20,8 @@ import {
   sortBy,
   unionBy
 } from 'lodash';
-import { AppSandbox } from '../../app.sandbox';
+import { CarService } from '../../services/car.service';
+import { OptionService } from '../../services/option.service';
 
 @Component({
   selector: 'app-options',
@@ -64,8 +65,9 @@ export class OptionsContainer implements OnInit {
   singleOptions$: Observable<Option[]>;
   leasePrice$: Observable<number>;
 
-  constructor(private sb: AppSandbox,
-              private activatedRoute: ActivatedRoute) {
+  constructor(private activatedRoute: ActivatedRoute,
+              private carService: CarService,
+              private optionService: OptionService) {
   }
 
   ngOnInit(): void {
@@ -79,37 +81,33 @@ export class OptionsContainer implements OnInit {
 
     // intermediate streams
     this.options$ = this.carId$.pipe(
-      mergeMap(carId => this.sb.getOptions(carId))
+      mergeMap(carId => this.optionService.find(carId))
     );
-    this.selectedOptions$ = this.sb.selectedOptions$;
-    this.combinedOptions$ = combineLatest(
-      this.options$,
-      this.selectedOptions$
-    ).pipe(
-      map(([catalogOptions, selectedCatalogOptions]) => unionBy(selectedCatalogOptions, catalogOptions, 'optionId')),
-      map(catalogOptions => sortBy(catalogOptions, 'description')),
-      publishReplay(1),
-      refCount()
-    );
+
+    // TODO
+    this.selectedOptions$ = new Subject();
+    // TODO
+    // unionBy(selectedCatalogOptions, catalogOptions, 'optionId')
+    this.combinedOptions$ = new Subject();
 
     // presentation streams
     this.activeSelection$ = this.carId$.pipe(
-      mergeMap(carId => this.sb.getCar(carId))
+      mergeMap(carId => this.carService.findOne(carId))
     );
-    this.packs$ = this.combinedOptions$.pipe(
-      map(options => options.filter(option => option.optionType === 'pack'))
-    );
-    this.singleOptions$ = this.combinedOptions$.pipe(
-      map(options => options.filter(option => option.optionType === 'option'))
-    );
-    this.leasePrice$ = this.sb.leasePrice$;
+
+    // TODO
+    this.packs$ = new Subject();
+    // TODO
+    this.singleOptions$ = new Subject();
+    // TODO
+    this.leasePrice$ = new Subject();
   }
 
   onAddOption(option: Option): void {
-    this.sb.addOption(option);
+    // TODO
   }
 
   onRemoveOption(optionId: string): void {
-    this.sb.removeOption(optionId);
+    // TODO
   }
 }

@@ -1,10 +1,12 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  Input
+  Input,
+  OnInit
 } from '@angular/core';
 import { FilterValue } from '../../types/filter-value.type';
 import { FormGroup } from '@angular/forms';
+import { FilterService } from '../../services/filter.service';
 
 @Component({
   selector: 'app-filters',
@@ -28,9 +30,24 @@ import { FormGroup } from '@angular/forms';
                                      [filters]="filterGearboxes"></app-form-control-multi-checkbox>
   `
 })
-export class FiltersComponent {
+export class FiltersComponent implements OnInit {
+  // TODO: as a dumb component it's not allowed to fetch data
+  // TODO: move the responsibilities of fetching data to the respective smart component
+  // TODO: and pass along the data from top to bottom using the @Input decorator
+  // TODO: update the template accordingly (the async pipe is not necessary anymore)
+
   @Input() form: FormGroup;
-  @Input() filterMakes: FilterValue[];
-  @Input() filterFuelTypes: FilterValue[];
-  @Input() filterGearboxes: FilterValue[];
+
+  filterMakes: FilterValue[];
+  filterFuelTypes: FilterValue[];
+  filterGearboxes: FilterValue[];
+
+  constructor(private filterService: FilterService) {
+  }
+
+  ngOnInit(): void {
+    this.filterMakes = this.filterService.filterMakes;
+    this.filterFuelTypes = this.filterService.filterFuelTypes;
+    this.filterGearboxes = this.filterService.filterGearboxes;
+  }
 }

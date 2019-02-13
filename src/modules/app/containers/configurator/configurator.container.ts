@@ -9,18 +9,13 @@ import {
   map,
   publishReplay,
   refCount,
-  startWith,
-  switchMap,
-  takeUntil,
-  tap
+  startWith
 } from 'rxjs/operators';
 import {
-  combineLatest,
   Observable,
   Subject
 } from 'rxjs';
 import { Step } from '../../types/step.type';
-import { AppSandbox } from '../../app.sandbox';
 
 @Component({
   selector: 'app-configurator',
@@ -49,8 +44,7 @@ export class ConfiguratorContainer implements OnInit, OnDestroy {
   // presentation streams
   steps$: Observable<Step[]>;
 
-  constructor(private sb: AppSandbox,
-              private activatedRoute: ActivatedRoute) {
+  constructor(private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -65,24 +59,6 @@ export class ConfiguratorContainer implements OnInit, OnDestroy {
 
     // presentation streams
     this.steps$ = this.getSteps$();
-
-    this.carId$.pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(() => {
-      this.sb.clearOptions();
-    });
-
-    combineLatest(
-      this.carId$,
-      this.sb.selectedOptions$
-    ).pipe(
-      switchMap(([carId, selectedOptions]) =>
-        this.sb.calculate(
-          carId,
-          selectedOptions.map(option => option.optionId))
-      ),
-      takeUntil(this.destroy$)
-    ).subscribe();
   }
 
   ngOnDestroy(): void {

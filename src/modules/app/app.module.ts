@@ -26,7 +26,6 @@ import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { SelectedOptionListComponent } from './components/selected-option-list/selected-option-list.component';
 import { LeasePriceService } from './services/lease-price.service';
-import { AppSandbox } from './app.sandbox';
 import { HttpClientModule } from '@angular/common/http';
 import { LeasePriceComponent } from './components/lease-price/lease-price.component';
 import { registerLocaleData } from '@angular/common';
@@ -63,12 +62,11 @@ registerLocaleData(localeNl);
     StoreDevtoolsModule.instrument()
   ],
   providers: [
-    AppSandbox,
     CarService,
     FilterService,
     OptionService,
     LeasePriceService,
-    { provide: LOCALE_ID, useValue: 'nl-BE' },
+    {provide: LOCALE_ID, useValue: 'nl-BE'},
   ],
   bootstrap: [AppContainer]
 })
