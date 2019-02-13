@@ -2,11 +2,7 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { Option } from '../../types/option.type';
-import {
-  Observable,
-  Subject
-} from 'rxjs';
+import { Observable } from 'rxjs';
 import { Car } from '../../types/car.type';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -21,7 +17,6 @@ import {
   unionBy
 } from 'lodash';
 import { CarService } from '../../services/car.service';
-import { OptionService } from '../../services/option.service';
 
 @Component({
   selector: 'app-options',
@@ -46,15 +41,11 @@ export class OptionsContainer implements OnInit {
   // source streams
   carId$: Observable<string>;
 
-  // intermediate streams
-  options$: Observable<Option[]>;
-
   // presentation streams
   activeSelection$: Observable<Car>;
 
   constructor(private activatedRoute: ActivatedRoute,
-              private carService: CarService,
-              private optionService: OptionService) {
+              private carService: CarService) {
   }
 
   ngOnInit(): void {
@@ -65,9 +56,6 @@ export class OptionsContainer implements OnInit {
       publishReplay(1),
       refCount()
     );
-
-    // intermediate streams
-    this.options$ = new Subject();
 
     // presentation streams
     this.activeSelection$ = this.carId$.pipe(
