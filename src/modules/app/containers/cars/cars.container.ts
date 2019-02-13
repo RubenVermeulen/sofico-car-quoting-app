@@ -81,10 +81,6 @@ export class CarsContainer implements OnInit {
     this.cars$ = this.carService.find();
 
     // presentation streams
-    // TODO: to determine the filtered values you have to combine the cars with the form values
-    // TODO: (hint: combineLatest - https://www.learnrxjs.io/operators/combination/combinelatest.html)
-    // TODO: to fetch data from a form in a reactive way: form.get('YOUR_FORM_CONTROL').valueChanges
-    // TODO: a form won't emit any values initially (hint: startWith)
     this.filteredCars$ = combineLatest(
       this.cars$,
       this.form.get('makes').valueChanges.pipe(startWith([])),
