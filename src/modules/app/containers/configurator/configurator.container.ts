@@ -10,9 +10,11 @@ import {
   publishReplay,
   refCount,
   startWith,
+  switchMap,
   takeUntil
 } from 'rxjs/operators';
 import {
+  combineLatest,
   Observable,
   Subject
 } from 'rxjs';
@@ -69,6 +71,15 @@ export class ConfiguratorContainer implements OnInit, OnDestroy {
 
     // TODO: combine both the carId$ and selectedOptions$ and execute the calculation (hint: switchMap)
     // TODO: make sure you subscribe to your stream
+    combineLatest(
+      this.carId$,
+      this.sb.selectedOptions$
+    ).pipe(
+      switchMap(([carId, options]) => {
+        // call the calculate function from the sandbox and pass along the correct parameters
+
+      })
+    ).subscribe();
   }
 
   ngOnDestroy(): void {
