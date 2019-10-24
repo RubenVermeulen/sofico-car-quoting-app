@@ -1,11 +1,15 @@
-import { ActionTypes } from '../action-types';
-import { LeasePriceActions } from '../actions';
+import {setLeasePriceAction} from '../actions';
+import {Action, createReducer, on} from '@ngrx/store';
 
-export function leasePriceReducer(state: number = null, action: LeasePriceActions): number {
-  switch (action.type) {
-    case ActionTypes.SET_LEASE_PRICE:
-      return action.payload.leasePrice;
-    default:
-      return state;
-  }
+const initialState: number = null;
+const reducer = createReducer(
+  initialState,
+  on(
+    setLeasePriceAction,
+    (state, {leasePrice}) => leasePrice
+  )
+);
+
+export function leasePriceReducer(state: number = null, action: Action): number {
+  return reducer(state, action);
 }
