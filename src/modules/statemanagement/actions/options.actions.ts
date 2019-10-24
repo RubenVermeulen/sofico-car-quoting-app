@@ -1,29 +1,17 @@
-import { Option } from '../../app/types/option.type';
-import { ActionTypes } from '../action-types';
+import {Option} from '../../app/types/option.type';
+import {createAction, props} from '@ngrx/store';
 
-export class ClearOptionsAction {
-  type = ActionTypes.CLEAR_OPTIONS;
-}
+export const clearOptionsAction = createAction(
+  'OPTIONS_CLEAR',
+  props<{}>()
+);
 
-export class AddOptionAction {
-  type = ActionTypes.ADD_OPTION;
-  payload: { option: Option };
+export const addOptionAction = createAction(
+  'ADD_OPTION',
+  props<{ option: Option; }>()
+);
 
-  constructor(option: Option) {
-    this.payload = {option};
-  }
-}
-
-export class RemoveOptionAction {
-  type = ActionTypes.REMOVE_OPTION;
-  payload: { optionId: string };
-
-  constructor(optionId: string) {
-    this.payload = {optionId};
-  }
-}
-
-export type OptionsActions =
-  | ClearOptionsAction
-  | AddOptionAction
-  | RemoveOptionAction;
+export const removeOptionAction = createAction(
+  'REMOVE_OPTION',
+  props<{ optionId: string; }>()
+);

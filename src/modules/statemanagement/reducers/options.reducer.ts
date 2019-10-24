@@ -1,6 +1,6 @@
-import { Option } from '../../app/types/option.type';
-import { OptionsActions } from '../actions';
-import { ActionTypes } from '../action-types';
+import {Option} from '../../app/types/option.type';
+import {Action, createReducer, on} from '@ngrx/store';
+import {addOptionAction, clearOptionsAction, removeOptionAction} from '../actions';
 
 const initialState: Option[] = [];
 const reducer = createReducer(
