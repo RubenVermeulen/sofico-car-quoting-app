@@ -1,12 +1,7 @@
-import { ActionTypes } from '../action-types';
+import {createAction, props} from '@ngrx/store';
 
-export class SetLeasePriceAction {
-  type = ActionTypes.SET_LEASE_PRICE;
-  payload: { leasePrice: number; };
+export const setLeasePriceAction = createAction(
+  'SET_LEASE_PRICE',
+  props<{ leasePrice: number; }>()
+);
 
-  constructor(leasePrice: number) {
-    this.payload = {leasePrice};
-  }
-}
-
-export type LeasePriceActions = SetLeasePriceAction;
