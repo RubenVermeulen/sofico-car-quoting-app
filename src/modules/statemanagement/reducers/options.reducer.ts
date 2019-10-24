@@ -1,16 +1,24 @@
-import { Option } from '../../app/types/option.type';
-import { OptionsActions } from '../actions';
-import { ActionTypes } from '../action-types';
+import {Option} from '../../app/types/option.type';
+import {Action, createReducer, on} from '@ngrx/store';
+import {addOptionAction, clearOptionsAction, removeOptionAction} from '../actions';
 
-export function optionsReducer(state: Option[] = [], action: OptionsActions): Option[] {
-  switch (action.type) {
-    case ActionTypes.ADD_OPTION:
-      return null;
-    case ActionTypes.REMOVE_OPTION:
-      return null;
-    case ActionTypes.CLEAR_OPTIONS:
-      return [];
-    default:
-      return state;
-  }
+const initialState: Option[] = [];
+const reducer = createReducer(
+  initialState,
+  on(
+    clearOptionsAction,
+    () => []
+  ),
+  on(
+    addOptionAction,
+    () => []
+  ),
+  on(
+    removeOptionAction,
+    () => []
+  )
+);
+
+export function optionsReducer(state: Option[] = [], action: Action): Option[] {
+  return reducer(state, action);
 }
