@@ -11,14 +11,15 @@ const reducer = createReducer(
   ),
   on(
     addOptionAction,
-    () => []
+    (state, {option}) => [...state, {...option, isSelected: true}]
   ),
   on(
     removeOptionAction,
-    () => []
+    (state, {optionId}) => state.filter(option => option.optionId !== optionId)
   )
 );
 
 export function optionsReducer(state: Option[] = [], action: Action): Option[] {
   return reducer(state, action);
 }
+
